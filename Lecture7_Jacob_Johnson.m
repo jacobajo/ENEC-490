@@ -29,26 +29,31 @@ xlabel('Year');
 ylabel('Capacity (MW)');
 set(ax,'FontSize',12);
 
+%For some reason, presence of the third column of NaNs is messing things up. Try this. 
+num2012(:,3)=[];
+num2015(:,3)=[];
+C = setdiff(num2012,num2015,'rows');
 
-C = setdiff(num2012,num2015) 
 
-%Note here I thought I may be able to do something similar with the for
-%loop so I can get the data in a usable format.  This may not be the 
-%best route though.
+%Need to initialize some new variables. 
+retired_bins=zeros(length(years),1);
 
 for i=1:length(C)
     
-    yr = C(i,5);
+    % Deleted column #3, so now the matrix is only Nx4
+    yr = C(i,4);
     
     bin_number = find(years==yr);
    
-    bins(bin_number) = bins(bin_number) + C(i,4);
+   % Have to change to C(i,3), again because we deleted column above. 
+    retired_bins(bin_number) = retired_bins(bin_number) + C(i,3);
     
 end
 
+hold on;
 
-hold on 
+bar(retired_bins,'LineWidth', .01);
 
-%bar() 
+
 
    
